@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class Player : MonoBehaviour
 {
     public static Player Instance;
+    [SerializeField] TextMeshProUGUI text;
     [SerializeField] int health;
     [SerializeField] TextMeshProUGUI itemText;
     private int itemsPickup;
@@ -17,6 +18,7 @@ public class Player : MonoBehaviour
     public void Damage(int damage)
     {
         health -= damage;
+        text.text = "Health: "+health.ToString();
         if (health <= 0)
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }

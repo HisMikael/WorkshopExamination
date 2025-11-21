@@ -15,11 +15,12 @@ public class EnemyTree : MonoBehaviour
     {
         
     }
-
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject != Player.Instance.gameObject)
             return;
         Player.Instance.Damage(attackDamage);
+        attackDamage = 0;
+        Destroy(gameObject);
     }
 }
