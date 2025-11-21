@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] private int itemsNeeded;
     public static Player Instance;
     [SerializeField] TextMeshProUGUI text;
     [SerializeField] int health;
@@ -27,6 +28,10 @@ public class Player : MonoBehaviour
     {
         itemsPickup++;
         itemText.text = "Items: "+itemsPickup.ToString();
+        if (itemsPickup >= itemsNeeded)
+        {
+            SceneManager.LoadScene(0);
+        }
     }
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
