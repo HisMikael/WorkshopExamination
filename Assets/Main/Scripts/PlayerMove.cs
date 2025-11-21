@@ -3,6 +3,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer))]
 public class PlayerMove : MonoBehaviour
 {
+    [SerializeField] private float shootSpeed;
+    [SerializeField] Transform shootItemHolder;
+    [SerializeField] GameObject shootItemPrefab;
     [SerializeField] Animator animator;
     [SerializeField] float moveSpeed;
     [SerializeField] float jumpForce;
@@ -68,10 +71,19 @@ public class PlayerMove : MonoBehaviour
             jumpTimer = jumpDelay;
         };
         actions.Player.Jump.Enable();
+        
+        actions.Player.Attack.performed += constext =>
+        {
+            if (shootItemPrefab == null)
+                return;
+            Instantiate(shootItemPrefab,transform.position,Quaternion.identity,shootItemHolder).GetComponent<Rigidbody2D>().linearVelocityX = spriteRenderer.flipX ? shootSpeed : -shootSpeed;
+        };
+        actions.Player.Attack.Enable();
     }
     void OnDisable()
     {
         actions.Player.Move.Disable();
         actions.Player.Jump.Disable();
+        actions.Player.Attack.Disable();
     }
 }
