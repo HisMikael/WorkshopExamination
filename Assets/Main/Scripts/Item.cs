@@ -21,6 +21,8 @@ public class Item : MonoBehaviour
             return;
         if (other.gameObject != Player.Instance.gameObject)
             return;
+
+        SoundManager.instance.PlaySound(SoundManager.SoundType.Collect, SoundManager.MixerType.SFX);
         hasBeenPickedUp = true;
         Player.Instance.PickUpItem();
         Destroy(gameObject);

@@ -70,25 +70,13 @@ public class SoundManager : MonoBehaviour
 
     public enum SoundType
     {
-        playerAttack,
-        playerJump,
-        playerHit,
-        playerFootstep,
-        enemyHit,
-        build,
-        upgrade,
-        spikeAttack,
-        cannonAttack,
+        Collect,
     }
     public enum MixerType
     {
         Master,
         Music,
-        Environment,
-        Player,
-        Enemy,
-        Tower,
-        Footsteps,
+        SFX,
     }
     
     [SerializeField] private Sounds[] soundsArray;
