@@ -1,11 +1,15 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Events;
+
 public class Dialog : MonoBehaviour
 {
     [SerializeField] TextAsset textAsset;
-    [SerializeField] TMPro.TextMeshPro textElement;
+    [SerializeField] TMPro.TextMeshProUGUI textElement;
     [SerializeField] float showTextDelay;
+    public UnityEvent onEndDialog;
     int textIndex = 0;
+    bool isWritingText = false;
     void Start()
     {
 
@@ -17,12 +21,24 @@ public class Dialog : MonoBehaviour
     }
     public void TriggerDialog()
     {
+        if (isWritingText)
+        {
+            isWritingText = false;
+            return;
+        }
         string loadedText = LoadPartOfText(textAsset.text, textIndex);
+        if (loadedText == "")
+        {
+            onEndDialog.Invoke();
+            return;
+        }
         textIndex += loadedText.Length;
         StartCoroutine(ShowText(loadedText, textElement, showTextDelay));
     }
-    string LoadPartOfText(string text, int startAtIndex = 0, string breakSequence = "\n\n")
+    string LoadPartOfText(string text, int startAtIndex = 0, string breakSequence = "---")
     {
+        if (startAtIndex + breakSequence.Length < text.Length && text.Substring(startAtIndex, breakSequence.Length) == breakSequence)
+            startAtIndex += breakSequence.Length;
         string loadedText = "";
         for (int i = startAtIndex; i < textAsset.text.Length; i++)
         {
@@ -32,14 +48,17 @@ public class Dialog : MonoBehaviour
         }
         return loadedText;
     }
-    IEnumerator ShowText(string text, TMPro.TextMeshPro textElement, float delay)
+    IEnumerator ShowText(string text, TMPro.TextMeshProUGUI textElement, float delay)
     {
+        isWritingText = true;
         textElement.text = "";
         for (int i = 0; i < text.Length; i++)
         {
             textElement.text += text[i];
-            yield return new WaitForSeconds(delay);
+            if (isWritingText)
+                yield return new WaitForSeconds(delay);
         }
+        isWritingText = false;
     }
 }
 
