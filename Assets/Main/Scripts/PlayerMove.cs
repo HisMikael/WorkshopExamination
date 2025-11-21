@@ -3,6 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer))]
 public class PlayerMove : MonoBehaviour
 {
+    [SerializeField] Animator animator;
     [SerializeField] float moveSpeed;
     [SerializeField] float jumpForce;
     [SerializeField] Collider2D groundCheckColider;
@@ -38,13 +39,20 @@ public class PlayerMove : MonoBehaviour
         {
             vec = context.ReadValue<Vector2>();
             vec.x *= moveSpeed;
+            if (animator != null)
+            {
+                animator.SetBool("IsMoving", true);
+                animator.SetTrigger("TriggerMove");
+            }
             if (vec.x < 0)
-                spriteRenderer.flipX = true;
-            else
                 spriteRenderer.flipX = false;
+            else
+                spriteRenderer.flipX = true;
         };
         actions.Player.Move.canceled += constext =>
         {
+            if (animator != null)
+                animator.SetBool("IsMoving", false);
             vec = Vector2.zero;
         };
         actions.Player.Move.Enable();
