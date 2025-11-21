@@ -37,7 +37,7 @@ public class PlayerMove : MonoBehaviour
         actions.Player.Move.performed += context =>
         {
             vec = context.ReadValue<Vector2>();
-            rb.linearVelocityX = vec.x * moveSpeed;
+            vec.x *= moveSpeed;
             if (vec.x < 0)
                 spriteRenderer.flipX = true;
             else
